@@ -22,6 +22,15 @@ def to_excel(df: pd.DataFrame) -> None:
 	except Exception as e:
 		print(e)
 
+
+# Convert DataFrame to csv
+def to_csv(df: pd.DataFrame) -> None:
+	try:
+		df.to_csv('out.csv', index=False)  
+	except Exception as e:
+		print(e)
+
+
 # Delete unnecesary colums
 # columns can be string, list of strings
 def del_unn_col(columns, df: pd.DataFrame) -> pd.DataFrame:

@@ -66,7 +66,9 @@ def main() -> None:
 	df = json_db.read()
 	df = json_db.refactor_table(df)
 
-	menu(df)
+	# menu(df)
+
+	json_db.to_csv(df)
 
 	# json_db.to_excel(df)
 
