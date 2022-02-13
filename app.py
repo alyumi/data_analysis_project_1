@@ -6,13 +6,13 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import typing
 
-import json_db
+import db
 
 
 # Method to show different plots
-def analyse(figure: int, df: pd.DataFrame) -> None:
+def analyse(figure: int, df: db.DF) -> None:
 	if figure == 1:
-		status = json_db.count(columns="status", df=df)
+		status = df.count(columns="status")
 		f1 = plt.figure(1)
 		plt.bar(status.index, status.values)
 		plt.title("Anime Status Count")
@@ -21,7 +21,7 @@ def analyse(figure: int, df: pd.DataFrame) -> None:
 		plt.show()
 
 	elif figure == 2: 
-		tp = json_db.count(columns="type", df=df)
+		tp = df.count(columns="type")
 		f2 = plt.figure(2)
 		plt.bar(tp.index, tp.values)
 		plt.title("Anime Types Count")
@@ -30,7 +30,7 @@ def analyse(figure: int, df: pd.DataFrame) -> None:
 		plt.show()
 
 	elif figure == 3:
-		years = json_db.qcount(df=df, query="(`year` != None) & (`year` >= 1910) & (`year` < 2022)", column="year")
+		years = df.query_count(query="(`year` != None) & (`year` >= 1910) & (`year` < 2022)", column="year")
 		years = years.sort_index(ascending=True)
 		f3 = plt.figure(3)
 		plt.plot(years.index, years.values)
@@ -41,7 +41,7 @@ def analyse(figure: int, df: pd.DataFrame) -> None:
 
 
 # Console menu
-def menu(df: pd.DataFrame) -> None:
+def menu(df: db.DF) -> None:
 	graphs = ["Anime Status Count", "Anime Types Count", "Anime Count by Years"]
 	print("Choose graph to show:")
 	print("1:", graphs[0])
@@ -63,14 +63,12 @@ def menu(df: pd.DataFrame) -> None:
 
 
 def main() -> None:
-	df = json_db.read()
-	df = json_db.refactor_table(df)
-
-	# menu(df)
-
-	json_db.to_csv(df)
-
-	# json_db.to_excel(df)
+	df = db.DF('D:/projects/python/shiki_app/shiki/anime-offline-database/anime-offline-database.json')
+	df.refactor_table()
+ 
+	menu(df)
+ 
+	# df.save_excel('answer.xlsx', 'anime')
 
 
 if __name__ == "__main__":
